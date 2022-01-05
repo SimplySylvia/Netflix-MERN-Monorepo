@@ -5,7 +5,7 @@ import cors from "cors";
 /* === Internal Modules === */
 import "./db.connection.js"; // brings in db conection
 import config from "@netflix/config"; // brings in all external configuration
-import movieRoutes from "./movie/movie.routes.js"; // brings in routes for movies
+import apiRoutes from "./routes.js"; // brings in routes for movies
 
 /* === Instanced Modules === */
 const app = express();
@@ -15,13 +15,14 @@ app.use(cors());
 app.use(express.json());
 
 /* === Routes === */
-app.get("/api/v1", function (req, res, next) {
-  return res.json({
-    message: "Welcome to netflix!",
-  });
-});
+// serves all api routes
+app.use("/api/v1/", apiRoutes);
 
-app.use("/api/v1/movies", movieRoutes);
+// serves react build
+app.use((req, res, next) => {
+  console.log(req.headers);
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 /* === Listener === */
 app.listen(config.PORT, function () {
