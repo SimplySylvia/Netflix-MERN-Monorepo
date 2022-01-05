@@ -57,3 +57,20 @@ export const update = async function (req, res, next) {
     });
   }
 };
+
+export const destroy = async function (req, res, next) {
+  try {
+    const deletedMovie = await Movie.findByIdAndDelete(req.params.id);
+
+    return res.json({
+      message: "Movie Deleted",
+      data: deletedMovie,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      message: "Error",
+      error,
+    });
+  }
+};
